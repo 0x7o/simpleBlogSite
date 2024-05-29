@@ -1,0 +1,7 @@
+psycopg2-binary
+gunicorn
+djangorestframework
+Django==3.2.15
+pyjwt==1.7.1
+djangorestframework_simplejwt
+uvicorn
