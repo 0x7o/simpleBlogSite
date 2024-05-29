@@ -81,7 +81,7 @@ export default function Home() {
         },
         validate: {
             body: (value) =>
-                value.length < 6 && "Body should be at least 6 characters long",
+                value.length < 1 && "Body should be at least 1 characters long",
         },
     });
 
