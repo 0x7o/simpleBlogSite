@@ -144,9 +144,9 @@ export default function Home() {
                     <Select
                         mt="md"
                         data={[
-                            {value: "blog", label: "Blog"},
-                            {value: "news", label: "News"},
-                            {value: "other", label: "Other"},
+                            {value: "blog", label: "Блог"},
+                            {value: "news", label: "Новости"},
+                            {value: "other", label: "Другое"},
                         ]}
                         label="Rubric"
                         placeholder="Select rubric"
@@ -311,10 +311,10 @@ export default function Home() {
                     </Group>
                     <Select
                         data={[
-                            {value: "all", label: "All Rubrics"},
-                            {value: "blog", label: "Blog"},
-                            {value: "news", label: "News"},
-                            {value: "other", label: "Other"},
+                            {value: "all", label: "Все рубрики"},
+                            {value: "blog", label: "Блог"},
+                            {value: "news", label: "Новости"},
+                            {value: "other", label: "Другое"},
                         ]}
                         defaultValue="all"
                         searchable={false}
@@ -326,14 +326,14 @@ export default function Home() {
                     />
                     <Select
                         data={[
-                            {value: "-created_at", label: "Newest"},
-                            {value: "created_at", label: "Oldest"},
-                            {value: "-likes", label: "Most Liked"},
-                            {value: "-dislikes", label: "Most Disliked"},
-                            {value: "title", label: "Title (A-Z)"},
-                            {value: "-title", label: "Title (Z-A)"},
-                            {value: "body", label: "Body (A-Z)"},
-                            {value: "-body", label: "Body (Z-A)"},
+                            {value: "-created_at", label: "Новые"},
+                            {value: "created_at", label: "Старые"},
+                            {value: "-likes", label: "По лайкам"},
+                            {value: "-dislikes", label: "По дизлайкам"},
+                            {value: "title", label: "Заголовок (А-Я)"},
+                            {value: "-title", label: "Заголовок (Я-A)"},
+                            {value: "body", label: "Описание (A-Я)"},
+                            {value: "-body", label: "Описание (Я-A)"},
                         ]}
                         defaultValue="-created_at"
                         searchable={false}
