@@ -24,7 +24,6 @@ services:
     depends_on:
       - db
     environment:
-      - DEBUG=0
       - DB_HOST=db
       - DB_NAME=db
       - DB_USER=user
