@@ -132,21 +132,24 @@ class PostReactionView(generics.UpdateAPIView):
         action = self.kwargs.get("action")
         if action == "like":
             if user in post.liked_by.all():
-                return Response({"detail": "You have already liked this comment"}, status=status.HTTP_400_BAD_REQUEST)
-            post.likes += 1
-            post.liked_by.add(user)
+                post.likes -= 1
+                post.liked_by.remove(user)
+            else:
+                post.likes += 1
+                post.liked_by.add(user)
+                if user in post.disliked_by.all():
+                    post.dislikes -= 1
+                    post.disliked_by.remove(user)
+        elif action == "dislike":
             if user in post.disliked_by.all():
                 post.dislikes -= 1
                 post.disliked_by.remove(user)
-        elif action == "dislike":
-            if user in post.disliked_by.all():
-                return Response({"detail": "You have already disliked this comment"},
-                                status=status.HTTP_400_BAD_REQUEST)
-            post.dislikes += 1
-            post.disliked_by.add(user)
-            if user in post.liked_by.all():
-                post.likes -= 1
-                post.liked_by.remove(user)
+            else:
+                post.dislikes += 1
+                post.disliked_by.add(user)
+                if user in post.liked_by.all():
+                    post.likes -= 1
+                    post.liked_by.remove(user)
         else:
             return Response({"detail": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
         post.save()
