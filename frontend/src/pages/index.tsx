@@ -106,7 +106,7 @@ export default function Home() {
     };
 
     const edit = (values: typeof new_post_form.values) => {
-        sendRequest("/api/posts/" + current_post?.id + "/update", "PUT", values).then((data) => {
+        sendRequest("/api/posts/" + current_post?.id + "/update/", "PUT", values).then((data) => {
             setPosts(posts.map((p) => p.id == current_post?.id ? data : p));
             closeEPost();
             new_post_form.reset();
@@ -134,7 +134,8 @@ export default function Home() {
                 size="lg"
                 centered
             >
-                <form onSubmit={new_post_form.onSubmit((values) => edit(values))}>
+                <form onSubmit={new_post_form.onSubmit((values) => { // @ts-ignore
+                    values.image = current_post?.image; edit(values)})}>
                     <TextInput
                         label="Заголовок"
                         placeholder="Введите заголовок поста"
