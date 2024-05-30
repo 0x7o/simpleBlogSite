@@ -4,6 +4,7 @@ import {
     Container,
     Group,
     Text,
+    Center,
     Paper,
     Select,
     Modal,
@@ -14,7 +15,7 @@ import {
     IconThumbUp,
     IconThumbDown,
     IconBubble,
-    IconPlus, IconTrash, IconPencil,
+    IconTrash, IconPencil,
 } from "@tabler/icons-react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useEffect, useState} from "react";
@@ -123,21 +124,21 @@ export default function Home() {
             <Modal
                 opened={openedEditorPost}
                 onClose={closeEPost}
-                title="Edit Post"
-                size="xl"
+                title="Редактирование поста"
+                size="lg"
                 centered
             >
                 <form onSubmit={new_post_form.onSubmit((values) => edit(values))}>
                     <TextInput
-                        label="Title"
-                        placeholder="Enter post title"
+                        label="Заголовок"
+                        placeholder="Введите заголовок поста"
                         key={new_post_form.key("title")}
                         {...new_post_form.getInputProps("title")}
                     />
                     <Textarea
                         mt="md"
-                        label="Body"
-                        placeholder="Enter post body"
+                        label="Описание"
+                        placeholder="Введите описание"
                         key={new_post_form.key("body")}
                         {...new_post_form.getInputProps("body")}
                     />
@@ -148,8 +149,8 @@ export default function Home() {
                             {value: "news", label: "Новости"},
                             {value: "other", label: "Другое"},
                         ]}
-                        label="Rubric"
-                        placeholder="Select rubric"
+                        label="Рубрика"
+                        placeholder="Выберите рубрику"
                         defaultValue="blog"
                         searchable={false}
                         onChange={(value) => {
@@ -159,40 +160,40 @@ export default function Home() {
                         }}
                     />
                     <Button mt="xl" variant="filled" color="blue" type="submit">
-                        Edit
+                        Отправить
                     </Button>
                 </form>
             </Modal>
             <Modal
                 opened={openedEditor}
                 onClose={close}
-                title="New Post"
-                size="xl"
+                title="Новый пост"
+                size="lg"
                 centered
             >
                 <form onSubmit={new_post_form.onSubmit((values) => post(values))}>
                     <TextInput
-                        label="Title"
-                        placeholder="Enter post title"
+                        label="Заголовок"
+                        placeholder="Введите заголовок"
                         key={new_post_form.key("title")}
                         {...new_post_form.getInputProps("title")}
                     />
                     <Textarea
                         mt="md"
-                        label="Body"
-                        placeholder="Enter post body"
+                        label="Описание"
+                        placeholder="Введите описание"
                         key={new_post_form.key("body")}
                         {...new_post_form.getInputProps("body")}
                     />
                     <Select
                         mt="md"
                         data={[
-                            {value: "blog", label: "Blog"},
-                            {value: "news", label: "News"},
-                            {value: "other", label: "Other"},
+                            {value: "blog", label: "Блог"},
+                            {value: "news", label: "Новости"},
+                            {value: "other", label: "Другое"},
                         ]}
-                        label="Rubric"
-                        placeholder="Select rubric"
+                        label="Рубрика"
+                        placeholder="Выберите рубрику"
                         defaultValue="blog"
                         searchable={false}
                         onChange={(value) => {
@@ -201,8 +202,8 @@ export default function Home() {
                             }
                         }}
                     />
-                    <Button mt="xl" variant="filled" color="green" type="submit">
-                        Create
+                    <Button mt="xl" variant="light" color="blue" type="submit">
+                        Создать
                     </Button>
                 </form>
             </Modal>
@@ -210,7 +211,7 @@ export default function Home() {
                 opened={openedPost}
                 onClose={closePost}
                 title={`@${current_post?.user} ${current_post?.title}`}
-                size="xl"
+                size="lg"
             >
                 {current_post ? <><Text>{current_post.body.split("\n").map((line) => <>{line}<br/></>)}</Text>
                     <form onSubmit={comment_form.onSubmit((values) => {
@@ -221,13 +222,13 @@ export default function Home() {
                     })}>
                         <Textarea
                             mt="md"
-                            label="Comment"
-                            placeholder="Enter your comment"
+                            label="Комментарий"
+                            placeholder="Оставьте свой комментарий"
                             key={comment_form.key("body")}
                             {...comment_form.getInputProps("body")}
                         />
-                        <Button variant="filled" color="green" type="submit">
-                            Submit
+                        <Button variant="light" color="blue" type="submit">
+                            Оставить
                         </Button>
                     </form>
                     <Box id="scrollableDiv" style={{maxHeight: '500px', overflow: 'auto'}}>
@@ -275,7 +276,7 @@ export default function Home() {
                                                 );
                                             }}
                                         >
-                                            Delete
+                                            Удалить
                                         </Button>
                                     )}
                                 </Paper>
@@ -284,29 +285,28 @@ export default function Home() {
                 </> : <></>}
 
             </Modal>
-            <Container size="lg" bg="#FEFDED" mt="xl" py="md">
+            <Container size="lg" bg="#151515" mt="xl" py="md">
                 <Group justify="space-between">
                     <Text size="xl" fw={700}>
-                        My Blog {isLoading ? "..." : `@${user?.username}`}
+                        Мой блог {isLoading ? "..." : `@${user?.username}`}
                     </Text>
                     {isLoading ? "..." : `${user?.uuid}`}
-                    <Button variant="filled" color="green" onClick={logout}>
-                        Logout
+                    <Button variant="filled" color="blue" onClick={logout}>
+                        Выйти
                     </Button>
                 </Group>
             </Container>
-            <Container size="lg" bg="#FEFDED" mt="xl" py="md">
+            <Container size="lg" bg="#151515" mt="xl" py="md">
                 <Group justify="space-between">
                     <Group>
-                        <Text size="lg">All Posts</Text>
+                        <Text size="lg">Посты</Text>
                         <Button
                             size="xs"
-                            rightSection={<IconPlus size={14}/>}
                             variant="light"
-                            color="green"
+                            color="blue"
                             onClick={open}
                         >
-                            New Post
+                            Новый пост
                         </Button>
                     </Group>
                     <Select
@@ -345,7 +345,7 @@ export default function Home() {
                     />
                 </Group>
                 {isLoading ? (
-                    <Text>Loading...</Text>
+                    <Text>Загрузка...</Text>
                 ) : (
                     <Box mt="xl">
                         <InfiniteScroll
@@ -365,7 +365,7 @@ export default function Home() {
                                 });
                             }}
                             hasMore={hasNext}
-                            loader={<Text>Loading...</Text>}
+                            loader={<Text>Загрузка...</Text>}
                             refreshFunction={() => {
                                 sendRequest("/api/post/?rubric=" + rubric + "&sort_by=" + sort_by, "GET", undefined).then((data) =>
                                     setPosts(data.results)
@@ -375,142 +375,143 @@ export default function Home() {
                             pullDownToRefreshThreshold={50}
                         >
                             {posts.map((post) => (
-                                <Paper shadow="xs" p="sm" mb="md" key={post.id}>
-                                    <Text size="lg">
-                                        {post.rubric} @{post.user} | {post.title}
-                                    </Text>
-                                    <Text mt="xs">
-                                        {post.body.length > 200
-                                            ? `${post.body.substring(0, 200)}...`
-                                            : post.body}
-                                    </Text>
-                                    {post.body.length > 200 && (
-                                        <Button
-                                            mb="xs"
-                                            size="xs"
-                                            variant="transparent"
-                                            color="green"
-                                            onClick={() => {
-                                                sendRequest(`/api/posts/${post.id}/comments/`, "GET", undefined).then(
-                                                    (data) => {
-                                                        setComments(data.results);
-                                                        openPost();
-                                                        setPost(post);
-                                                    }
-                                                );
-                                            }}
-                                        >
-                                            See more
-                                        </Button>
-                                    )}
-                                    <Group gap="xs" mt="xs">
-                                        <Button
-                                            size="xs"
-                                            leftSection={<IconThumbUp size={14}/>}
-                                            variant="transparent"
-                                            color="black"
-                                            onClick={() => {
-                                                sendRequest(`/api/posts/${post.id}/like/`, "PUT", undefined).then(
-                                                    (data) => {
-                                                        if (data.detail) {
-                                                            return
-                                                        }
-                                                        setPosts(
-                                                            posts.map((p) =>
-                                                                p.id == post.id ? {
-                                                                    ...p,
-                                                                    likes: data.likes,
-                                                                    dislikes: data.dislikes
-                                                                } : p
-                                                            )
-                                                        );
-                                                    }
-                                                );
-                                            }}
-                                        >
-                                            {post.likes}
-                                        </Button>
-                                        <Button
-                                            size="xs"
-                                            leftSection={<IconThumbDown size={14}/>}
-                                            variant="transparent"
-                                            color="black"
-                                            onClick={() => {
-                                                sendRequest(`/api/posts/${post.id}/dislike/`, "PUT", undefined).then(
-                                                    (data) => {
-                                                        if (data.detail) {
-                                                            return
-                                                        }
-                                                        setPosts(
-                                                            posts.map((p) =>
-                                                                p.id == post.id ? {
-                                                                    ...p,
-                                                                    likes: data.likes,
-                                                                    dislikes: data.dislikes
-                                                                } : p
-                                                            )
-                                                        );
-                                                    }
-                                                );
-                                            }}
-                                        >
-                                            {post.dislikes}
-                                        </Button>
-                                        <Button
-                                            size="xs"
-                                            leftSection={<IconBubble size={14}/>}
-                                            variant="transparent"
-                                            color="black"
-                                            onClick={() => {
-                                                sendRequest(`/api/posts/${post.id}/comments/`, "GET", undefined).then(
-                                                    (data) => {
-                                                        setComments(data.results);
-                                                        openPost();
-                                                        setPost(post);
-                                                    }
-                                                );
-                                            }}
-                                        >
-                                            Comments
-                                        </Button>
-                                        {post.user == user?.username && (
+                                <Center key={post.id}>
+                                    <Paper shadow="xs" p="sm" mb="md">
+                                        <Text size="lg">
+                                            {post.rubric} @{post.user} | {post.title}
+                                        </Text>
+                                        <Text mt="xs">
+                                            {post.body.length > 200
+                                                ? `${post.body.substring(0, 200)}...`
+                                                : post.body}
+                                        </Text>
+                                        {post.body.length > 200 && (
                                             <Button
+                                                mb="xs"
                                                 size="xs"
-                                                leftSection={<IconTrash size={14}/>}
                                                 variant="transparent"
-                                                color="red"
+                                                color="blue"
                                                 onClick={() => {
-                                                    sendRequest(`/api/posts/${post.id}/delete/`, "DELETE", undefined).then(
-                                                        () => {
-                                                            setPosts(posts.filter((p) => p.id != post.id));
+                                                    sendRequest(`/api/posts/${post.id}/comments/`, "GET", undefined).then(
+                                                        (data) => {
+                                                            setComments(data.results);
+                                                            openPost();
+                                                            setPost(post);
                                                         }
                                                     );
                                                 }}
                                             >
-                                                Delete
+                                                Подробнее
                                             </Button>
                                         )}
-                                        {post.user == user?.username && (
+                                        <Group gap="xs" mt="xs">
                                             <Button
                                                 size="xs"
-                                                leftSection={<IconPencil size={14}/>}
+                                                leftSection={<IconThumbUp size={14}/>}
                                                 variant="transparent"
-                                                color="blue"
+                                                color="white"
                                                 onClick={() => {
-                                                    setPost(post);
-                                                    new_post_form.setValues({
-                                                        title: post.title,
-                                                        body: post.body,
-                                                        rubric: post.rubric,
-                                                    });
-                                                    openEPost();
+                                                    sendRequest(`/api/posts/${post.id}/like/`, "PUT", undefined).then(
+                                                        (data) => {
+                                                            if (data.detail) {
+                                                                return
+                                                            }
+                                                            setPosts(
+                                                                posts.map((p) =>
+                                                                    p.id == post.id ? {
+                                                                        ...p,
+                                                                        likes: data.likes,
+                                                                        dislikes: data.dislikes
+                                                                    } : p
+                                                                )
+                                                            );
+                                                        }
+                                                    );
                                                 }}
                                             >
-                                                Edit
+                                                {post.likes}
                                             </Button>
-                                        )}
-                                    </Group>
-                                </Paper>
+                                            <Button
+                                                size="xs"
+                                                leftSection={<IconThumbDown size={14}/>}
+                                                variant="transparent"
+                                                color="white"
+                                                onClick={() => {
+                                                    sendRequest(`/api/posts/${post.id}/dislike/`, "PUT", undefined).then(
+                                                        (data) => {
+                                                            if (data.detail) {
+                                                                return
+                                                            }
+                                                            setPosts(
+                                                                posts.map((p) =>
+                                                                    p.id == post.id ? {
+                                                                        ...p,
+                                                                        likes: data.likes,
+                                                                        dislikes: data.dislikes
+                                                                    } : p
+                                                                )
+                                                            );
+                                                        }
+                                                    );
+                                                }}
+                                            >
+                                                {post.dislikes}
+                                            </Button>
+                                            <Button
+                                                size="xs"
+                                                leftSection={<IconBubble size={14}/>}
+                                                variant="transparent"
+                                                color="white"
+                                                onClick={() => {
+                                                    sendRequest(`/api/posts/${post.id}/comments/`, "GET", undefined).then(
+                                                        (data) => {
+                                                            setComments(data.results);
+                                                            openPost();
+                                                            setPost(post);
+                                                        }
+                                                    );
+                                                }}
+                                            >
+                                                Комментарии
+                                            </Button>
+                                            {post.user == user?.username && (
+                                                <Button
+                                                    size="xs"
+                                                    leftSection={<IconTrash size={14}/>}
+                                                    variant="transparent"
+                                                    color="red"
+                                                    onClick={() => {
+                                                        sendRequest(`/api/posts/${post.id}/delete/`, "DELETE", undefined).then(
+                                                            () => {
+                                                                setPosts(posts.filter((p) => p.id != post.id));
+                                                            }
+                                                        );
+                                                    }}
+                                                >
+                                                    Удалить
+                                                </Button>
+                                            )}
+                                            {post.user == user?.username && (
+                                                <Button
+                                                    size="xs"
+                                                    leftSection={<IconPencil size={14}/>}
+                                                    variant="transparent"
+                                                    color="blue"
+                                                    onClick={() => {
+                                                        setPost(post);
+                                                        new_post_form.setValues({
+                                                            title: post.title,
+                                                            body: post.body,
+                                                            rubric: post.rubric,
+                                                        });
+                                                        openEPost();
+                                                    }}
+                                                >
+                                                    Изменить
+                                                </Button>
+                                            )}
+                                        </Group>
+                                    </Paper></Center>
                             ))}
                         </InfiniteScroll>
                     </Box>

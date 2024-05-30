@@ -1,4 +1,4 @@
-import {Button, Container, Group, Text, TextInput, PasswordInput} from "@mantine/core";
+import {Button, Container, Group, Text, TextInput, PasswordInput, Center} from "@mantine/core";
 import {useForm} from '@mantine/form';
 import {useRouter} from "next/router";
 
@@ -11,8 +11,8 @@ export default function Auth() {
         },
 
         validate: {
-            username: (value) => value.length < 3 && 'Username should be at least 3 characters long',
-            password: (value) => value.length < 6 && 'Password should be at least 6 characters long',
+            username: (value) => value.length < 3 && 'Имя пользователя должно состоять не менее чем из 3 символов',
+            password: (value) => value.length < 6 && 'Пароль должен состоять не менее чем из 6 символов',
         },
     });
 
@@ -26,8 +26,8 @@ export default function Auth() {
         },
 
         validate: {
-            username: (value) => value.length < 3 && 'Username should be at least 3 characters long',
-            password: (value) => value.length < 6 && 'Password should be at least 6 characters long',
+            username: (value) => value.length < 3 && 'Имя пользователя должно состоять не менее чем из 3 символов',
+            password: (value) => value.length < 6 && 'Пароль должен состоять не менее чем из 6 символов',
         },
     });
 
@@ -47,7 +47,7 @@ export default function Auth() {
                         router.push("/");
                     });
                 } else {
-                    loginform.setErrors({password: "Invalid username or password"});
+                    loginform.setErrors({password: "Неверное имя пользователя или пароль"});
                 }
             })
     };
@@ -64,7 +64,7 @@ export default function Auth() {
                 if (response.status == 200) {
                     handleLoginSubmit(values);
                 } else {
-                    signupform.setErrors({username: "User already exists"});
+                    signupform.setErrors({username: "Пользователь уже существует"});
                 }
             })
     };
@@ -72,53 +72,61 @@ export default function Auth() {
 
     return (
         <>
-            <Container size="lg" bg="#FEFDED" mt="xl" py="md">
+            <Container size="lg" bg="#151515" mt="xl" py="md">
                 <Group justify="space-between">
-                    <Text size="xl" fw={700}>Authorization</Text>
+                    <Text size="xl" fw={700}>Авторизация</Text>
                 </Group>
             </Container>
-            <Container size="lg" bg="#FEFDED" mt="xl" py="md">
-                <Text size="xl" fw={700} mb="lg">Log In</Text>
-                <form onSubmit={loginform.onSubmit(handleLoginSubmit)}>
-                    <TextInput
-                        label="Username"
-                        placeholder="Enter your username"
-                        key={loginform.key('username')}
-                        {...loginform.getInputProps('username')}
-                    />
-                    <PasswordInput
-                        mt="xs"
-                        label="Password"
-                        placeholder="Enter your password"
-                        key={loginform.key('password')}
-                        {...loginform.getInputProps('password')}
-                    />
-                    <Button type="submit" mt="xl" variant="filled" color="green">
-                        Log In
-                    </Button>
-                </form>
-            </Container>
-            <Container size="lg" bg="#FEFDED" mt="xl" py="md">
-                <Text size="xl" fw={700} mb="lg">Sign Up</Text>
-                <form onSubmit={signupform.onSubmit(handleSignupSubmit)}>
-                    <TextInput
-                        label="Username"
-                        placeholder="Enter your username"
-                        key={signupform.key('username')}
-                        {...signupform.getInputProps('username')}
-                    />
-                    <PasswordInput
-                        mt="xs"
-                        label="Password"
-                        placeholder="Enter your password"
-                        key={signupform.key('password')}
-                        {...signupform.getInputProps('password')}
-                    />
-                    <Button type="submit" mt="xl" variant="filled" color="green">
-                        Sign Up
-                    </Button>
-                </form>
-            </Container>
+            <Center>
+                <Container size="lg" bg="#151515" mt="xl" py="md">
+                    <Text size="xl" fw={700} mb="lg">Войти</Text>
+                    <form onSubmit={loginform.onSubmit(handleLoginSubmit)}>
+                        <TextInput
+                            size="xs"
+                            label="Имя пользователи"
+                            placeholder="Введите имя пользователя"
+                            key={loginform.key('username')}
+                            {...loginform.getInputProps('username')}
+                        />
+                        <PasswordInput
+                            size="xs"
+                            mt="xs"
+                            label="Пароль"
+                            placeholder="Введите пароль"
+                            key={loginform.key('password')}
+                            {...loginform.getInputProps('password')}
+                        />
+                        <Button type="submit" mt="xl" variant="light" color="blue">
+                            Войти
+                        </Button>
+                    </form>
+                </Container>
+            </Center>
+            <Center>
+                <Container size="lg" bg="#151515" mt="xl" py="md">
+                    <Text size="xl" fw={700} mb="lg">Регистрация</Text>
+                    <form onSubmit={signupform.onSubmit(handleSignupSubmit)}>
+                        <TextInput
+                            label="Имя пользователи"
+                            size="xs"
+                            placeholder="Введите имя пользователя"
+                            key={signupform.key('username')}
+                            {...signupform.getInputProps('username')}
+                        />
+                        <PasswordInput
+                            mt="xs"
+                            size="xs"
+                            label="Пароль"
+                            placeholder="Введите пароль"
+                            key={signupform.key('password')}
+                            {...signupform.getInputProps('password')}
+                        />
+                        <Button type="submit" mt="xl" variant="light" color="blue">
+                            Регистрация
+                        </Button>
+                    </form>
+                </Container>
+            </Center>
         </>
     );
 }
