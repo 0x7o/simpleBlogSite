@@ -213,9 +213,11 @@ export default function Home() {
                             // to base64
                             const reader = new FileReader();
                             reader.onload = () => {
-                                new_post_form.setFieldValue("image", reader.result);
+                                // @ts-ignore
+                                new_post_form.setFieldValue("image", () => reader.result);
                             };
                             reader.readAsDataURL(files[0]);
+                            // @ts-ignore
                             new_post_form.setFieldValue("image", files[0]);
                         }}
                         maxSize={2 * 1024 ** 2}
