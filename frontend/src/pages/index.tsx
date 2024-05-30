@@ -10,12 +10,14 @@ import {
     Modal,
     Textarea,
     TextInput,
+FileInput,
 } from "@mantine/core";
 import {
     IconThumbUp,
     IconThumbDown,
     IconBubble,
     IconTrash, IconPencil,
+    Image,
 } from "@tabler/icons-react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useEffect, useState} from "react";
@@ -93,14 +95,28 @@ export default function Home() {
     };
 
     const post = (values: typeof new_post_form.values) => {
-        sendRequest("/api/post/", "POST", values).then((data) => {
+        const formData = new FormData();
+        formData.append("title", values.title);
+        formData.append("body", values.body);
+        formData.append("rubric", values.rubric);
+        if (values.image) {
+            formData.append("image", values.image);
+        }
+        sendRequest("/api/post/", "POST", formData).then((data) => {
             setPosts([data, ...posts]);
             close();
         });
     };
 
     const edit = (values: typeof new_post_form.values) => {
-        sendRequest("/api/posts/" + current_post?.id + "/update", "PUT", values).then((data) => {
+        const formData = new FormData();
+        formData.append("title", values.title);
+        formData.append("body", values.body);
+        formData.append("rubric", values.rubric);
+        if (values.image) {
+            formData.append("image", values.image);
+        }
+        sendRequest("/api/posts/" + current_post?.id + "/update", "PUT", formData).then((data) => {
             setPosts(posts.map((p) => p.id == current_post?.id ? data : p));
             closeEPost();
             new_post_form.reset();
@@ -159,6 +175,18 @@ export default function Home() {
                             }
                         }}
                     />
+                    {current_post?.image && (
+                        <Image src={current_post.image} alt="Current Post Image" mt="md" />
+                    )}
+                    <FileInput
+                        mt="md"
+                        label="Изображение"
+                        placeholder="Выберите новое изображение"
+                        accept="image/png,image/jpeg"
+                        onChange={(file) => {
+                            new_post_form.setFieldValue("image", file);
+                        }}
+                    />
                     <Button mt="xl" variant="filled" color="blue" type="submit">
                         Отправить
                     </Button>
@@ -200,6 +228,15 @@ export default function Home() {
                             if (typeof value == "string") {
                                 new_post_form.setFieldValue("rubric", value);
                             }
+                        }}
+                    />
+                    <FileInput
+                        mt="md"
+                        label="Изображение"
+                        placeholder="Выберите изображение"
+                        accept="image/png,image/jpeg"
+                        onChange={(file) => {
+                            new_post_form.setFieldValue("image", file);
                         }}
                     />
                     <Button mt="xl" variant="light" color="blue" type="submit">
@@ -377,6 +414,9 @@ export default function Home() {
                             {posts.map((post) => (
                                 <Center key={post.id}>
                                     <Paper shadow="xs" p="sm" mb="md">
+                                        {post.image && (
+                                            <Image src={post.image} alt={post.title} mb="sm" />
+                                        )}
                                         <Text size="lg">
                                             {post.rubric} @{post.user} | {post.title}
                                         </Text>
