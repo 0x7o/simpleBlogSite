@@ -25,6 +25,8 @@ import {useEffect, useState} from "react";
 import {sendImage, sendRequest} from "../../jwt";
 import {useDisclosure} from "@mantine/hooks";
 import {useForm} from "@mantine/form";
+import { Route } from "react-router-dom";
+import NotFoundPage from "./NotFoundPage";
 
 type Post = {
     id: number;
@@ -571,6 +573,7 @@ export default function Home() {
                     </Box>
                 )}
             </Container>
+            <Route path="*" element={<NotFoundPage />} />
         </>
     );
 }
