@@ -10,6 +10,7 @@ import {
     Modal,
     Textarea,
     TextInput,
+    FileInput,
 } from "@mantine/core";
 import {
     IconThumbUp,
@@ -93,14 +94,28 @@ export default function Home() {
     };
 
     const post = (values: typeof new_post_form.values) => {
-        sendRequest("/api/post/", "POST", values).then((data) => {
+        const formData = new FormData();
+        formData.append('title', values.title);
+        formData.append('body', values.body);
+        formData.append('rubric', values.rubric);
+        if (values.image) {
+            formData.append('image', values.image);
+        }
+        sendRequest("/api/post/", "POST", formData).then((data) => {
             setPosts([data, ...posts]);
             close();
         });
     };
 
     const edit = (values: typeof new_post_form.values) => {
-        sendRequest("/api/posts/" + current_post?.id + "/update", "PUT", values).then((data) => {
+        const formData = new FormData();
+        formData.append('title', values.title);
+        formData.append('body', values.body);
+        formData.append('rubric', values.rubric);
+        if (values.image) {
+            formData.append('image', values.image);
+        }
+        sendRequest("/api/posts/" + current_post?.id + "/update", "PUT", formData).then((data) => {
             setPosts(posts.map((p) => p.id == current_post?.id ? data : p));
             closeEPost();
             new_post_form.reset();
@@ -159,6 +174,14 @@ export default function Home() {
                             }
                         }}
                     />
+                    <FileInput
+                        mt="md"
+                        label="Изображение"
+                        placeholder="Выберите изображение"
+                        accept="image/*"
+                        key={new_post_form.key("image")}
+                        {...new_post_form.getInputProps("image")}
+                    />
                     <Button mt="xl" variant="filled" color="blue" type="submit">
                         Отправить
                     </Button>
@@ -201,6 +224,14 @@ export default function Home() {
                                 new_post_form.setFieldValue("rubric", value);
                             }
                         }}
+                    />
+                    <FileInput
+                        mt="md"
+                        label="Изображение"
+                        placeholder="Выберите изображение"
+                        accept="image/*"
+                        key={new_post_form.key("image")}
+                        {...new_post_form.getInputProps("image")}
                     />
                     <Button mt="xl" variant="light" color="blue" type="submit">
                         Создать

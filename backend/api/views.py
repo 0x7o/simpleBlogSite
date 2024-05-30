@@ -4,6 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from . import serializers, models
 
@@ -48,6 +49,7 @@ class PostListCreateView(generics.ListCreateAPIView):
     )
     serializer_class = serializers.PostSerializer
     pagination_class = PageNumberPagination
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         rubric = self.request.query_params.get('rubric', None)
@@ -58,7 +60,7 @@ class PostListCreateView(generics.ListCreateAPIView):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user, image=self.request.data.get('image'))
 
 
 class PostDeleteView(generics.DestroyAPIView):
@@ -79,6 +81,7 @@ class PostUpdateView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = models.Post.objects.all()
     serializer_class = serializers.PostSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
     def update(self, request, *args, **kwargs):
         post = get_object_or_404(models.Post, id=self.kwargs["pk"])
@@ -86,6 +89,8 @@ class PostUpdateView(generics.UpdateAPIView):
         if post.user != user:
             return Response({"detail": "You do not have permission to update this post"},
                             status=status.HTTP_403_FORBIDDEN)
+        if 'image' in request.data:
+            post.image = request.data['image']
         return super().update(request, *args, **kwargs)
 
 
