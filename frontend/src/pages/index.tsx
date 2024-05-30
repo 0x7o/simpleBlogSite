@@ -10,18 +10,19 @@ import {
     Modal,
     Textarea,
     TextInput,
-FileInput,
+    FileInput,
 } from "@mantine/core";
 import {
     IconThumbUp,
     IconThumbDown,
     IconBubble,
     IconTrash, IconPencil,
-    Image,
+    IconX, IconUpload, IconPhoto
 } from "@tabler/icons-react";
+import {Dropzone, IMAGE_MIME_TYPE, MIME_TYPES} from '@mantine/dropzone';
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useEffect, useState} from "react";
-import {sendRequest} from "../../jwt";
+import {sendImage, sendRequest} from "../../jwt";
 import {useDisclosure} from "@mantine/hooks";
 import {useForm} from "@mantine/form";
 
@@ -32,6 +33,7 @@ type Post = {
     body: string;
     rubric: string;
     likes: number;
+    image: string;
     dislikes: number;
 };
 
@@ -66,6 +68,7 @@ export default function Home() {
             title: "",
             body: "",
             rubric: "blog",
+            image: null,
         },
         validate: {
             title: (value) =>
@@ -95,28 +98,15 @@ export default function Home() {
     };
 
     const post = (values: typeof new_post_form.values) => {
-        const formData = new FormData();
-        formData.append("title", values.title);
-        formData.append("body", values.body);
-        formData.append("rubric", values.rubric);
-        if (values.image) {
-            formData.append("image", values.image);
-        }
-        sendRequest("/api/post/", "POST", formData).then((data) => {
+        sendRequest("/api/post/", "POST", values).then((data) => {
             setPosts([data, ...posts]);
+            new_post_form.reset();
             close();
         });
     };
 
     const edit = (values: typeof new_post_form.values) => {
-        const formData = new FormData();
-        formData.append("title", values.title);
-        formData.append("body", values.body);
-        formData.append("rubric", values.rubric);
-        if (values.image) {
-            formData.append("image", values.image);
-        }
-        sendRequest("/api/posts/" + current_post?.id + "/update", "PUT", formData).then((data) => {
+        sendRequest("/api/posts/" + current_post?.id + "/update", "PUT", values).then((data) => {
             setPosts(posts.map((p) => p.id == current_post?.id ? data : p));
             closeEPost();
             new_post_form.reset();
@@ -175,18 +165,6 @@ export default function Home() {
                             }
                         }}
                     />
-                    {current_post?.image && (
-                        <Image src={current_post.image} alt="Current Post Image" mt="md" />
-                    )}
-                    <FileInput
-                        mt="md"
-                        label="Изображение"
-                        placeholder="Выберите новое изображение"
-                        accept="image/png,image/jpeg"
-                        onChange={(file) => {
-                            new_post_form.setFieldValue("image", file);
-                        }}
-                    />
                     <Button mt="xl" variant="filled" color="blue" type="submit">
                         Отправить
                     </Button>
@@ -230,15 +208,48 @@ export default function Home() {
                             }
                         }}
                     />
-                    <FileInput
-                        mt="md"
-                        label="Изображение"
-                        placeholder="Выберите изображение"
-                        accept="image/png,image/jpeg"
-                        onChange={(file) => {
-                            new_post_form.setFieldValue("image", file);
+                    <Dropzone
+                        onDrop={(files) => {
+                            // to base64
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                new_post_form.setFieldValue("image", reader.result);
+                            };
+                            reader.readAsDataURL(files[0]);
+                            new_post_form.setFieldValue("image", files[0]);
                         }}
-                    />
+                        maxSize={2 * 1024 ** 2}
+                        accept={IMAGE_MIME_TYPE}
+                    >
+                        <Group
+                            style={{minHeight: 220, pointerEvents: "none"}}
+                        >
+                            <Dropzone.Accept>
+                                <IconUpload
+                                    size={50}
+                                    stroke={1.5}
+                                />
+                            </Dropzone.Accept>
+                            <Dropzone.Reject>
+                                <IconX
+                                    size={50}
+                                    stroke={1.5}
+                                />
+                            </Dropzone.Reject>
+                            <Dropzone.Idle>
+                                <IconPhoto size={50} stroke={1.5}/>
+                            </Dropzone.Idle>
+
+                            <div>
+                                <Text size="xl" inline>
+                                    Перетащите изображение
+                                </Text>
+                                <Text size="sm" color="dimmed" inline mt={7}>
+                                    Принимаются изображения любого формата до 2МБ.
+                                </Text>
+                            </div>
+                        </Group>
+                    </Dropzone>
                     <Button mt="xl" variant="light" color="blue" type="submit">
                         Создать
                     </Button>
@@ -414,9 +425,9 @@ export default function Home() {
                             {posts.map((post) => (
                                 <Center key={post.id}>
                                     <Paper shadow="xs" p="sm" mb="md">
-                                        {post.image && (
-                                            <Image src={post.image} alt={post.title} mb="sm" />
-                                        )}
+                                        {post.image &&
+                                            <img src={post.image} style={{maxWidth: '100%'}} alt="s" width="200"/>
+                                        }
                                         <Text size="lg">
                                             {post.rubric} @{post.user} | {post.title}
                                         </Text>

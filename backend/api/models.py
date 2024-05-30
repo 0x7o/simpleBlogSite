@@ -16,7 +16,7 @@ class Post(models.Model):
     liked_by = models.ManyToManyField(User, related_name="liked_comments", blank=True)
     disliked_by = models.ManyToManyField(User, related_name="disliked_comments", blank=True)
     body = models.TextField()
-    image = models.ImageField(upload_to='post_images/', null=True, blank=True)
+    image = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
